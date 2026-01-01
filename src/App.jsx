@@ -1,6 +1,7 @@
 import "./App.css";
 import apiList from "./constants/apiList";
 import Header from "./layouts/header/Header";
+import ChatPage from "./pages/Chat/ChatPage";
 import DashboardPage from "./pages/Dashboard/DashboardPage";
 import LoginPage from "./pages/Login/LoginPage";
 import RegisterPage from "./pages/Register/RegisterPage";
@@ -8,7 +9,7 @@ import TestPage from "./pages/Test/TestPage";
 import apiService from "./services/apiService";
 import { useAuth } from "./stores/useAuth";
 import { useEffect } from "react";
-import { BrowserRouter as Router, Route,Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Navigate, Outlet } from "react-router-dom";
 
 const LoggedInProtectedRoute = () => {
@@ -57,6 +58,7 @@ function App() {
           <Route element={<LoggedInProtectedRoute />}>
             <Route path="/" element={<DashboardPage />} />
             <Route path="/test" element={<TestPage />} />
+            <Route path="/chat" element={<ChatPage />} />
           </Route>
         </Routes>
       </Router>
