@@ -35,6 +35,7 @@ function App() {
           setUserInfo({
             email: res?.data?.email,
             id: res?.data?._id,
+            name: res?.data?.fullName,
             ...res.data,
           });
         }
