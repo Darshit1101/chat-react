@@ -1,102 +1,102 @@
-import React, { useState } from "react";
+import { socket } from "../../configs/socket";
+import { useAuth } from "../../stores/useAuth";
+import {
+  Box,
+  Button,
+  Container,
+  List,
+  ListItem,
+  ListItemText,
+  Paper,
+  TextField,
+  Typography,
+} from "@mui/material";
+import { useEffect, useState } from "react";
 
-const ChatPage = () => {
+const Chat = () => {
+  const { id: currentUserId } = useAuth();
+  const receiverId = "69578c872823487b38ee726c";
+
+  const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState("");
 
-  // Placeholder for Socket.IO integration
-  // You'll need to import io from 'socket.io-client' and connect to your server
-  // Example: const socket = io('http://localhost:3000');
-  // Then, in useEffect: socket.on('message', (msg) => setMessages(prev => [...prev, msg]));
+  // RECEIVE MESSAGE (ONLY ONE EVENT)
+  useEffect(() => {
+    const handler = (msg) => {
+      setMessages((prev) => {
+        if (prev.some((m) => String(m._id) === String(msg._id))) {
+          return prev;
+        }
+        return [...prev, msg];
+      });
+    };
 
+    socket.off("receive_message");
+    socket.on("receive_message", handler);
+
+    return () => socket.off("receive_message", handler);
+  }, []);
+
+  // SEND MESSAGE (OPTIMISTIC UI)
   const sendMessage = () => {
-    if (input.trim()) {
-      // socket.emit('message', input);
-      setMessages((prev) => [...prev, { text: input, from: "me" }]);
-      setInput("");
-    }
+    if (!message.trim()) return;
+
+    const tempMessage = {
+      _id: Date.now(), // temporary id
+      senderId: currentUserId,
+      receiverId,
+      message,
+    };
+
+    setMessages((prev) => [...prev, tempMessage]);
+
+    socket.emit("send_message", {
+      to: receiverId,
+      message,
+    });
+
+    setMessage("");
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        height: "100vh",
-      }}
-    >
-      <div
-        style={{
-          flex: 1,
-          overflowY: "auto",
-          padding: "10px",
-          border: "1px solid #ccc",
-          backgroundColor: "#f9f9f9",
-        }}
-      >
-        {messages.map((msg, index) => (
-          <div
-            key={index}
-            style={{
-              marginBottom: "10px",
-              textAlign: msg.from === "me" ? "right" : "left",
-            }}
-          >
-            <span
-              style={{
-                background: msg.from === "me" ? "#007bff" : "#e9ecef",
-                color: msg.from === "me" ? "white" : "black",
-                padding: "8px 12px",
-                borderRadius: "18px",
-                display: "inline-block",
-                maxWidth: "70%",
-                wordWrap: "break-word",
-              }}
-            >
-              {msg.text}
-            </span>
-          </div>
-        ))}
-      </div>
-      <div
-        style={{
-          display: "flex",
-          padding: "10px",
-          borderTop: "1px solid #ccc",
-          backgroundColor: "#fff",
-        }}
-      >
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyPress={(e) => e.key === "Enter" && sendMessage()}
-          style={{
-            flex: 1,
-            padding: "10px",
-            border: "1px solid #ccc",
-            borderRadius: "20px",
-            marginRight: "10px",
-            outline: "none",
-          }}
-          placeholder="Type a message..."
-        />
-        <button
-          onClick={sendMessage}
-          style={{
-            padding: "10px 20px",
-            backgroundColor: "#007bff",
-            color: "white",
-            border: "none",
-            borderRadius: "20px",
-            cursor: "pointer",
-          }}
-        >
-          Send
-        </button>
-      </div>
-    </div>
+    <Container maxWidth="sm">
+      <Paper elevation={3} sx={{ p: 2 }}>
+        <Typography variant="h5" gutterBottom>
+          Chat
+        </Typography>
+
+        <List>
+          {messages.map((m) => (
+            <ListItem key={m._id}>
+              <ListItemText
+                primary={
+                  <b>
+                    {String(m.senderId) === String(currentUserId)
+                      ? "You"
+                      : "Them"}
+                    :
+                  </b>
+                }
+                secondary={m.message}
+              />
+            </ListItem>
+          ))}
+        </List>
+
+        <Box display="flex" gap={1} mt={2}>
+          <TextField
+            fullWidth
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder="Type your message..."
+          />
+          <Button variant="contained" onClick={sendMessage}>
+            Send
+          </Button>
+        </Box>
+      </Paper>
+    </Container>
   );
 };
 
-export default ChatPage;
+export default Chat;
