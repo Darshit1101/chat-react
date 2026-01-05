@@ -6,6 +6,7 @@ import DashboardPage from "./pages/Dashboard/DashboardPage";
 import LoginPage from "./pages/Login/LoginPage";
 import RegisterPage from "./pages/Register/RegisterPage";
 import TestPage from "./pages/Test/TestPage";
+import UsersPage from "./pages/Users/UsersPage";
 import apiService from "./services/apiService";
 import { useAuth } from "./stores/useAuth";
 import { useEffect } from "react";
@@ -60,6 +61,7 @@ function App() {
             <Route path="/" element={<DashboardPage />} />
             <Route path="/test" element={<TestPage />} />
             <Route path="/chat" element={<ChatPage />} />
+            <Route path="/users" element={<UsersPage />} />
           </Route>
         </Routes>
       </Router>
