@@ -16,6 +16,7 @@ import { useEffect, useRef, useState } from "react";
 const Chat = () => {
   const { id: currentUserId } = useAuth();
   const receiverId = "69578c872823487b38ee726c";
+  // const receiverId = "69566926acee7e8abf6cf390";
 
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
@@ -26,7 +27,7 @@ const Chat = () => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // 🔹 FETCH CHAT HISTORY (RELOAD SAFE)
+  //fetch chat history
   useEffect(() => {
     const fetchHistory = async () => {
       try {
@@ -36,7 +37,7 @@ const Chat = () => {
         });
 
         if (res.success) {
-          setMessages(res.data); // already sorted from backend
+          setMessages(res.data);
         }
       } catch (error) {
         console.error("Failed to fetch chat history:", error);
@@ -71,6 +72,11 @@ const Chat = () => {
       to: receiverId,
       message,
     });
+
+    setMessages((prev) => [
+      ...prev,
+      { _id: Date.now().toString(), senderId: currentUserId, message },
+    ]);
 
     setMessage("");
   };
@@ -126,7 +132,7 @@ const Chat = () => {
               >
                 {!isMe && (
                   <Avatar sx={{ mr: 1 }}>
-                    {m.senderId?.fullName?.charAt(0).toUpperCase()}
+                    {m?.senderId?.fullName?.charAt(0).toUpperCase()}
                   </Avatar>
                 )}
 
@@ -145,7 +151,9 @@ const Chat = () => {
                 </Box>
 
                 {isMe && (
-                  <Avatar sx={{ ml: 1, bgcolor: "primary.main" }}>Me</Avatar>
+                  <Avatar sx={{ ml: 1, bgcolor: "primary.main" }}>
+                    {m?.senderId?.fullName?.charAt(0).toUpperCase()}
+                  </Avatar>
                 )}
               </Box>
             );
