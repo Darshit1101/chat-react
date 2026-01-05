@@ -2,9 +2,11 @@ import apiList from "../../constants/apiList";
 import apiService from "../../services/apiService";
 import { useAuth } from "../../stores/useAuth";
 import { AppBar, Box, Button, Toolbar, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const { logout } = useAuth();
+  const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
@@ -18,10 +20,23 @@ const Header = () => {
   return (
     <AppBar position="static">
       <Toolbar>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+        <Typography
+          variant="h6"
+          component="div"
+          sx={{ flexGrow: 1, cursor: "pointer" }}
+          onClick={() => navigate("/")}
+        >
           Chat App
         </Typography>
         <Box>
+          <Button
+            color="inherit"
+            onClick={() => {
+              navigate("/chat");
+            }}
+          >
+            Chat
+          </Button>
           <Button color="inherit" onClick={handleLogout}>
             Logout
           </Button>
