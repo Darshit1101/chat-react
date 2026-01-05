@@ -132,15 +132,15 @@ const Chat = () => {
               >
                 {!isMe && (
                   <Avatar sx={{ mr: 1 }}>
-                    {m?.senderId?.fullName?.charAt(0).toUpperCase()}
+                    {m?.senderId?.fullName?.slice(0, 2).toUpperCase()}
                   </Avatar>
                 )}
 
                 <Box
                   sx={{
                     maxWidth: "70%",
-                    px: 2,
-                    py: 1.2,
+                    px: 1,
+                    py: 1,
                     borderRadius: 3,
                     bgcolor: isMe ? "primary.main" : "white",
                     color: isMe ? "white" : "black",
@@ -152,7 +152,7 @@ const Chat = () => {
 
                 {isMe && (
                   <Avatar sx={{ ml: 1, bgcolor: "primary.main" }}>
-                    {m?.senderId?.fullName?.charAt(0).toUpperCase()}
+                    {m?.senderId?.fullName?.slice(0, 2).toUpperCase()}
                   </Avatar>
                 )}
               </Box>
