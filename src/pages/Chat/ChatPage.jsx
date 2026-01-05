@@ -164,7 +164,7 @@ const Chat = () => {
         {/* INPUT */}
         <Box
           sx={{
-            p: 2,
+            p: 1,
             borderTop: "1px solid #eee",
             display: "flex",
             gap: 1,
