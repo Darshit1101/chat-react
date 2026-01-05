@@ -60,7 +60,7 @@ const Chat = () => {
     <Container
       maxWidth="sm"
       sx={{
-        height: "100vh",
+        height: "80vh",
         display: "flex",
         flexDirection: "column",
         py: 2,
