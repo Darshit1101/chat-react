@@ -60,7 +60,7 @@ function App() {
           <Route element={<LoggedInProtectedRoute />}>
             <Route path="/" element={<DashboardPage />} />
             <Route path="/test" element={<TestPage />} />
-            <Route path="/chat" element={<ChatPage />} />
+            <Route path="/chat/:receiverId" element={<ChatPage />} />
             <Route path="/users" element={<UsersPage />} />
           </Route>
         </Routes>

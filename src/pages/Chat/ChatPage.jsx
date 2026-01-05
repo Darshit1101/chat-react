@@ -12,11 +12,11 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
+import { useParams } from "react-router-dom";
 
 const Chat = () => {
-  const { id: currentUserId } = useAuth();
-  const receiverId = "69578c872823487b38ee726c";
-  // const receiverId = "69566926acee7e8abf6cf390";
+  const { id: currentUserId, fullName: currentUserName } = useAuth();
+  const { receiverId } = useParams();
 
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
@@ -103,7 +103,7 @@ const Chat = () => {
           }}
         >
           <Avatar />
-          <Typography variant="h6">Chat</Typography>
+          <Typography variant="h6">{currentUserName}</Typography>
         </Box>
 
         {/* MESSAGES */}

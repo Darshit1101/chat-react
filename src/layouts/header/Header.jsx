@@ -32,10 +32,10 @@ const Header = () => {
           <Button
             color="inherit"
             onClick={() => {
-              navigate("/chat");
+              navigate("/users");
             }}
           >
-            Chat
+            Users
           </Button>
           <Button color="inherit" onClick={handleLogout}>
             Logout

@@ -37,6 +37,10 @@ const apiList = {
       method: "POST",
       url: `${VITE_BACKEND_URL}${appName}${prefix}/auth/2fa/login/verify`,
     },
+    USERS: {
+      method: "GET",
+      url: `${VITE_BACKEND_URL}${appName}${prefix}/auth/users`,
+    },
   },
   ACTIVE_DEVICE: {
     GET_DEVICES: {
