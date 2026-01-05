@@ -1,4 +1,6 @@
 import { socket } from "../../configs/socket";
+import apiList from "../../constants/apiList";
+import apiService from "../../services/apiService";
 import { useAuth } from "../../stores/useAuth";
 import {
   Avatar,
@@ -17,6 +19,26 @@ const Chat = () => {
 
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
+
+  // FETCH CHAT HISTORY
+  useEffect(() => {
+    const fetchHistory = async () => {
+      try {
+        const res = await apiService({
+          ...apiList.CHAT.GET_HISTORY,
+          url: apiList.CHAT.GET_HISTORY.url.replace(":receiverId", receiverId),
+        });
+        if (res.success) {
+          console.log("Chat history===>", res.data);
+          setMessages(res.data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch chat history:", error);
+      }
+    };
+
+    fetchHistory();
+  }, []);
 
   // RECEIVE MESSAGE (ONLY ONE EVENT)
   useEffect(() => {
@@ -96,7 +118,9 @@ const Chat = () => {
                 mb={1}
               >
                 {!isMe && (
-                  <Avatar sx={{ bgcolor: "secondary.main", mr: 1 }}>T</Avatar>
+                  <Avatar sx={{ bgcolor: "secondary.main", mr: 1 }}>
+                    {m.senderId?.fullName?.charAt(0).toUpperCase()}
+                  </Avatar>
                 )}
                 <Box
                   sx={{
@@ -110,7 +134,9 @@ const Chat = () => {
                   <Typography variant="body1">{m.message}</Typography>
                 </Box>
                 {isMe && (
-                  <Avatar sx={{ bgcolor: "primary.main", ml: 1 }}>Y</Avatar>
+                  <Avatar sx={{ bgcolor: "primary.main", ml: 1 }}>
+                    {currentUserId?.fullName?.charAt(0).toUpperCase()}
+                  </Avatar>
                 )}
               </Box>
             );

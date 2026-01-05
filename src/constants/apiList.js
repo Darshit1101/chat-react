@@ -47,7 +47,13 @@ const apiList = {
       method: "DELETE",
       url: `${VITE_BACKEND_URL}${appName}${prefix}/active-device/:id`,
     },
-  }
+  },
+  CHAT: {
+    GET_HISTORY: {
+      method: "GET",
+      url: `${VITE_BACKEND_URL}${appName}${prefix}/chat/:receiverId`,
+    },
+  },
 };
 
 export default apiList;
