@@ -1,3 +1,4 @@
+import Button from "../../components/global/buttons/Button";
 import { socket } from "../../configs/socket";
 import apiList from "../../constants/apiList";
 import apiService from "../../services/apiService";
@@ -5,7 +6,6 @@ import { useAuth } from "../../stores/useAuth";
 import {
   Avatar,
   Box,
-  Button,
   Container,
   Paper,
   TextField,
@@ -177,11 +177,7 @@ const Chat = () => {
             placeholder="Type a message"
             onKeyDown={(e) => e.key === "Enter" && sendMessage()}
           />
-          <Button
-            variant="contained"
-            onClick={sendMessage}
-            disabled={!message.trim()}
-          >
+          <Button onClick={sendMessage} disabled={!message.trim()}>
             Send
           </Button>
         </Box>
