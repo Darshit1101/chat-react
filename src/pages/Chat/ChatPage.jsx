@@ -1,18 +1,12 @@
-import Button from "../../components/global/buttons/Button";
 import { socket } from "../../configs/socket";
 import apiList from "../../constants/apiList";
 import apiService from "../../services/apiService";
 import { useAuth } from "../../stores/useAuth";
-import formatDateTime from "../../utils/formatDateTime";
-import {
-  Avatar,
-  Box,
-  Container,
-  Paper,
-  TextField,
-  Typography,
-} from "@mui/material";
-import { useEffect, useRef, useState } from "react";
+import ChatHeader from "./components/ChatHeader";
+import MessageInput from "./components/MessageInput";
+import MessageList from "./components/MessageList";
+import { Container, Paper } from "@mui/material";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 const Chat = () => {
@@ -21,12 +15,6 @@ const Chat = () => {
 
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
-  const bottomRef = useRef(null);
-
-  // 🔹 AUTO SCROLL
-  useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
 
   //fetch chat history
   useEffect(() => {
@@ -98,114 +86,21 @@ const Chat = () => {
         }}
       >
         {/* HEADER */}
-        <Box
-          sx={{
-            p: 2,
-            borderBottom: "1px solid #eee",
-            display: "flex",
-            alignItems: "center",
-            gap: 1,
-          }}
-        >
-          <Avatar sx={{ mr: 1 }}>
-            {currentUserName?.slice(0, 2).toUpperCase()}
-          </Avatar>
-          <Typography variant="h6">{currentUserName}</Typography>
-        </Box>
+        <ChatHeader currentUserName={currentUserName} />
 
         {/* MESSAGES */}
-        <Box
-          sx={{
-            flexGrow: 1,
-            p: 2,
-            overflowY: "auto",
-            bgcolor: "#f9f9f9",
-          }}
-        >
-          {messages.map((m) => {
-            const senderId =
-              typeof m?.senderId === "object" ? m?.senderId?._id : m?.senderId;
-
-            const isMe = String(senderId) === String(currentUserId);
-
-            return (
-              <Box
-                key={m._id}
-                sx={{
-                  display: "flex",
-                  justifyContent: isMe ? "flex-end" : "flex-start",
-                  alignItems: "center",
-                  mb: 1.5,
-                }}
-              >
-                {!isMe && (
-                  <Avatar sx={{ mr: 1 }}>
-                    {m?.senderId?.fullName?.slice(0, 2).toUpperCase()}
-                  </Avatar>
-                )}
-
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: isMe ? "flex-end" : "flex-start",
-                    maxWidth: "70%",
-                    px: 1.5,
-                    py: 1,
-                    borderRadius: 3,
-                    bgcolor: isMe ? "primary.main" : "white",
-                    color: isMe ? "white" : "black",
-                    boxShadow: 1,
-                  }}
-                >
-                  {/* MESSAGE TEXT */}
-                  <Typography variant="body1">{m.message}</Typography>
-
-                  {/* MESSAGE TIME */}
-                  <Typography
-                    variant="caption"
-                    sx={{
-                      display: "block",
-                      mt: 0.5,
-                      textAlign: "right",
-                      color: isMe ? "rgba(255,255,255,0.7)" : "gray",
-                    }}
-                  >
-                    {formatDateTime(m.createdAt)}
-                  </Typography>
-                </Box>
-
-                {isMe && (
-                  <Avatar sx={{ ml: 1, bgcolor: "primary.main" }}>
-                    {currentUserName?.slice(0, 2).toUpperCase()}
-                  </Avatar>
-                )}
-              </Box>
-            );
-          })}
-          <div ref={bottomRef} />
-        </Box>
+        <MessageList
+          messages={messages}
+          currentUserId={currentUserId}
+          currentUserName={currentUserName}
+        />
 
         {/* INPUT */}
-        <Box
-          sx={{
-            p: 1,
-            borderTop: "1px solid #eee",
-            display: "flex",
-            gap: 1,
-          }}
-        >
-          <TextField
-            fullWidth
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder="Type a message..."
-            onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-          />
-          <Button onClick={sendMessage} disabled={!message.trim()}>
-            Send
-          </Button>
-        </Box>
+        <MessageInput
+          message={message}
+          setMessage={setMessage}
+          sendMessage={sendMessage}
+        />
       </Paper>
     </Container>
   );
