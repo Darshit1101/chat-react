@@ -4,7 +4,7 @@ const ChatHeader = ({ currentUserName }) => {
   return (
     <Box
       sx={{
-        p: 2,
+        p: 1,
         borderBottom: "1px solid #eee",
         display: "flex",
         alignItems: "center",
