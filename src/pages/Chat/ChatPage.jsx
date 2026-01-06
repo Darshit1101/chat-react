@@ -3,6 +3,7 @@ import { socket } from "../../configs/socket";
 import apiList from "../../constants/apiList";
 import apiService from "../../services/apiService";
 import { useAuth } from "../../stores/useAuth";
+import formatDateTime from "../../utils/formatDateTime";
 import {
   Avatar,
   Box,
@@ -75,12 +76,16 @@ const Chat = () => {
 
     setMessages((prev) => [
       ...prev,
-      { _id: Date.now().toString(), senderId: currentUserId, message },
+      {
+        _id: Date.now().toString(),
+        senderId: currentUserId,
+        message,
+        createdAt: new Date(),
+      },
     ]);
 
     setMessage("");
   };
-
   return (
     <Container maxWidth="sm" sx={{ height: "85vh", py: 2 }}>
       <Paper
@@ -117,7 +122,7 @@ const Chat = () => {
         >
           {messages.map((m) => {
             const senderId =
-              typeof m.senderId === "object" ? m.senderId._id : m.senderId;
+              typeof m?.senderId === "object" ? m?.senderId?._id : m?.senderId;
 
             const isMe = String(senderId) === String(currentUserId);
 
@@ -127,6 +132,7 @@ const Chat = () => {
                 sx={{
                   display: "flex",
                   justifyContent: isMe ? "flex-end" : "flex-start",
+                  alignItems: "center",
                   mb: 1.5,
                 }}
               >
@@ -138,8 +144,11 @@ const Chat = () => {
 
                 <Box
                   sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: isMe ? "flex-end" : "flex-start",
                     maxWidth: "70%",
-                    px: 1,
+                    px: 1.5,
                     py: 1,
                     borderRadius: 3,
                     bgcolor: isMe ? "primary.main" : "white",
@@ -147,12 +156,26 @@ const Chat = () => {
                     boxShadow: 1,
                   }}
                 >
+                  {/* MESSAGE TEXT */}
                   <Typography variant="body1">{m.message}</Typography>
+
+                  {/* MESSAGE TIME */}
+                  <Typography
+                    variant="caption"
+                    sx={{
+                      display: "block",
+                      mt: 0.5,
+                      textAlign: "right",
+                      color: isMe ? "rgba(255,255,255,0.7)" : "gray",
+                    }}
+                  >
+                    {formatDateTime(m.createdAt)}
+                  </Typography>
                 </Box>
 
                 {isMe && (
                   <Avatar sx={{ ml: 1, bgcolor: "primary.main" }}>
-                    {m?.senderId?.fullName?.slice(0, 2).toUpperCase()}
+                    {currentUserName?.slice(0, 2).toUpperCase()}
                   </Avatar>
                 )}
               </Box>
@@ -174,7 +197,7 @@ const Chat = () => {
             fullWidth
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-            placeholder="Type a message"
+            placeholder="Type a message..."
             onKeyDown={(e) => e.key === "Enter" && sendMessage()}
           />
           <Button onClick={sendMessage} disabled={!message.trim()}>
