@@ -33,7 +33,7 @@ const MessageItem = ({ message, isMe, currentUserName }) => {
         }}
       >
         {/* MESSAGE TEXT */}
-        <Typography variant="body1">{message.message}</Typography>
+        <Typography variant="body2">{message.message}</Typography>
 
         {/* MESSAGE TIME */}
         <Typography
