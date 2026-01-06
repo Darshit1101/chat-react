@@ -107,7 +107,9 @@ const Chat = () => {
             gap: 1,
           }}
         >
-          <Avatar />
+          <Avatar sx={{ mr: 1 }}>
+            {currentUserName?.slice(0, 2).toUpperCase()}
+          </Avatar>
           <Typography variant="h6">{currentUserName}</Typography>
         </Box>
 
