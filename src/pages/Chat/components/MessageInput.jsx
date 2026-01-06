@@ -1,5 +1,6 @@
 import Button from "../../../components/global/buttons/Button";
 import { Box, TextField } from "@mui/material";
+import { SendHorizontal } from "lucide-react";
 
 const MessageInput = ({ message, setMessage, sendMessage }) => {
   return (
@@ -19,7 +20,7 @@ const MessageInput = ({ message, setMessage, sendMessage }) => {
         onKeyDown={(e) => e.key === "Enter" && sendMessage()}
       />
       <Button onClick={sendMessage} disabled={!message.trim()}>
-        Send
+        <SendHorizontal />
       </Button>
     </Box>
   );
