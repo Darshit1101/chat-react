@@ -36,7 +36,7 @@ const Chat = () => {
     fetchHistory();
   }, [receiverId]);
 
-  // 🔹 RECEIVE MESSAGE
+  //  RECEIVE MESSAGE
   useEffect(() => {
     const handler = (msg) => {
       setMessages((prev) => {
@@ -53,7 +53,7 @@ const Chat = () => {
     return () => socket.off("receive_message", handler);
   }, []);
 
-  // 🔹 SEND MESSAGE
+  //  SEND MESSAGE
   const sendMessage = () => {
     if (!message.trim()) return;
 
@@ -74,6 +74,7 @@ const Chat = () => {
 
     setMessage("");
   };
+
   return (
     <Container maxWidth="sm" sx={{ height: "85vh", py: 2 }}>
       <Paper
