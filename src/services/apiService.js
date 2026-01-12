@@ -33,11 +33,16 @@ const apiService = async (apiConfig = {}, data = null) => {
   try {
     const visitorId = await initVisitorId();
 
+    // Exclude visitorId from login and register APIs
+    const isAuthEndpoint =
+      apiConfig.url.includes("/auth/login") ||
+      apiConfig.url.includes("/auth/register");
+
     const headers = {
       "Content-Type": "application/json",
       // ngrok skip browser warning page
       "ngrok-skip-browser-warning": "69420",
-      ...(visitorId && { "x-visitor-id": visitorId }),
+      ...(!isAuthEndpoint && visitorId && { "x-visitor-id": visitorId }),
     };
 
     const fetchConfig = {
